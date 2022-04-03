@@ -15,6 +15,10 @@ defmodule WebServerWeb.Router do
     plug CORSPlug
   end
 
+  pipeline :authenticated do
+    plug WebServer.Plug.Authenticate
+  end
+
   scope "/", WebServerWeb do
     pipe_through :browser
 
@@ -23,7 +27,7 @@ defmodule WebServerWeb.Router do
 
   # TODO: api
   scope "/api", WebServerWeb do
-    pipe_through :api
+    pipe_through [:api, :authenticated]
 
     scope "/v1" do
       #resources "/users", UserController

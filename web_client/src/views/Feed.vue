@@ -16,17 +16,23 @@
       router.push('/')
     }
     
-    user.getIdToken().then((token)=>{
-      console.log(token)
+    user.getIdToken(true).then((token)=>{
+      //console.log(token);
+      const config = {
+          headers: {
+              //"Content-type": "application/json",
+              "Authorization": `Bearer ${token}`,
+          },
+      };  
+
+      axios.get('http://0.0.0.0:4000/api/v1/'+'users', config).then((response)=>{
+        console.log(response);
+      }).catch((error)=>{
+        console.log(`Error! HTTP Status: ${error}`);
+      });
     });
   })
 
-  axios.get('http://0.0.0.0:4000/api/v1/'+'users').then((response)=>{
-    console.log(response);
-  }).catch((error)=>{
-    console.log(`Error! HTTP Status: ${error}`);
-  });
-  
   onBeforeUnmount(() => {
     // clear up listener
     authListener()
